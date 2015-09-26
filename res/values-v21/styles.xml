@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!--
         Base application theme, dependent on API level. This theme is replaced
@@ -13,11 +13,13 @@
         <item name="colorPrimary">@color/material_deep_teal_500</item>
         <item name="colorPrimaryDark">@color/material_deep_teal_200</item>
         <item name="colorAccent">@color/abc_primary_text_material_light</item>
-        <item name="colorControlNormal">@color/red900</item>
+        <item name="colorControlNormal">@android:color/white</item>
         <item name="colorControlHighlight">@color/blue100</item>
         <item name="colorButtonNormal">@color/amber100</item>
         <item name="colorSwitchThumbNormal">@color/cyan100</item>
         <item name="controlBackground">@color/orange100</item>
+        <item name="windowActionBar">false</item>
+        <item name="actionMenuTextColor">@android:color/white</item>
     </style>
 
 </resources>
