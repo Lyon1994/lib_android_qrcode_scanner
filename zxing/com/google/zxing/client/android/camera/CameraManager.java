@@ -23,10 +23,14 @@ import android.hardware.Camera;
 import android.os.Handler;
 import android.util.Log;
 import android.view.SurfaceHolder;
+
 import com.google.zxing.PlanarYUVLuminanceSource;
 import com.google.zxing.client.android.camera.open.OpenCameraInterface;
 
 import java.io.IOException;
+
+import org.lyon_yan.android.lib_android_qrcode_scanner.MainActivity;
+import org.lyon_yan.android.lib_android_qrcode_scanner.core.CameraUtils;
 
 /**
  * This object wraps the Camera service object and expects to be the only one talking to it. The

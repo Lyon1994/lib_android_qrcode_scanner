@@ -39,7 +39,7 @@ import com.google.zxing.ResultPointCallback;
  *
  * @author dswitkin@google.com (Daniel Switkin)
  */
-final class DecodeThread extends Thread {
+public final class DecodeThread extends Thread {
 
   public static final String BARCODE_BITMAP = "barcode_bitmap";
   public static final String BARCODE_SCALED_FACTOR = "barcode_scaled_factor";
@@ -49,7 +49,7 @@ final class DecodeThread extends Thread {
   private Handler handler;
   private final CountDownLatch handlerInitLatch;
 
-  DecodeThread(MainActivity activity,
+  public  DecodeThread(MainActivity activity,
                Collection<BarcodeFormat> decodeFormats,
                Map<DecodeHintType,?> baseHints,
                String characterSet,
