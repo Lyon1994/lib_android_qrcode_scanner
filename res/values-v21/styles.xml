@@ -10,8 +10,8 @@
             res/values-vXX/styles.xml, while customizations related to
             backward-compatibility can go here.
         -->
-        <item name="colorPrimary">@color/material_deep_teal_500</item>
-        <item name="colorPrimaryDark">@color/material_deep_teal_200</item>
+        <item name="colorPrimary">@color/cyan400</item>
+        <item name="colorPrimaryDark">@color/cyan700</item>
         <item name="colorAccent">@color/abc_primary_text_material_light</item>
         <item name="colorControlNormal">@android:color/white</item>
         <item name="colorControlHighlight">@color/blue100</item>
