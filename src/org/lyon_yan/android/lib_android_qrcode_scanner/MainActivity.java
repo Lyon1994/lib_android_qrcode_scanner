@@ -179,9 +179,9 @@ public class MainActivity extends AppCompatActivity implements
 		// false)) {
 		// setRequestedOrientation(getCurrentOrientation());
 		// } else {
-		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
+//		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
 		// }
-
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		resetStatusView();
 
 		beepManager.updatePrefs();
