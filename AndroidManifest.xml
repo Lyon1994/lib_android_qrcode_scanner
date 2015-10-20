@@ -70,7 +70,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainActivity"
+            android:name="com.dtr.zxing.activity.CaptureActivity"
             android:clearTaskOnLaunch="true"
             android:screenOrientation="sensorLandscape"
             android:stateNotNeeded="true"
@@ -134,6 +134,24 @@
                     android:scheme="zxing" />
             </intent-filter>
         </activity>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <activity android:name="com.dtr.zxing.activity.ResultActivity"></activity>
+        
+        
+        
+        
+        
+        
         <activity
             android:name="com.google.zxing.client.android.PreferencesActivity"
             android:label="@string/preferences_name"
