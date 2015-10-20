@@ -129,6 +129,9 @@ public final class ViewfinderView extends View {
         paint.setColor(resultPointColor);
         synchronized (currentPossible) {
           for (ResultPoint point : currentPossible) {
+        	  /**
+        	   * 绘制关键点
+        	   */
             canvas.drawCircle(frameLeft + (int) (point.getX() * scaleX),
                               frameTop + (int) (point.getY() * scaleY),
                               POINT_SIZE, paint);
@@ -141,6 +144,9 @@ public final class ViewfinderView extends View {
         synchronized (currentLast) {
           float radius = POINT_SIZE / 2.0f;
           for (ResultPoint point : currentLast) {
+        	  /**
+        	   * 绘制关键点
+        	   */
             canvas.drawCircle(frameLeft + (int) (point.getX() * scaleX),
                               frameTop + (int) (point.getY() * scaleY),
                               radius, paint);

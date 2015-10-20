@@ -72,7 +72,6 @@
         <activity
             android:name=".MainActivity"
             android:clearTaskOnLaunch="true"
-            android:screenOrientation="sensorLandscape"
             android:stateNotNeeded="true"
             android:windowSoftInputMode="stateAlwaysHidden" >
             <intent-filter>

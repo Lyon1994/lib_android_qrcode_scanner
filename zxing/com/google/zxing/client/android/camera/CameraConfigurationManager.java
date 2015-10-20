@@ -28,131 +28,162 @@ import android.view.WindowManager;
 import com.google.zxing.client.android.PreferencesActivity;
 
 /**
- * A class which deals with reading, parsing, and setting the camera parameters which are used to
- * configure the camera hardware.
+ * A class which deals with reading, parsing, and setting the camera parameters
+ * which are used to configure the camera hardware.
  */
 final class CameraConfigurationManager {
 
-  private static final String TAG = "CameraConfiguration";
+	private static final String TAG = "CameraConfiguration";
 
-  private final Context context;
-  private Point screenResolution;
-  private Point cameraResolution;
+	private final Context context;
+	private Point screenResolution;
+	private Point cameraResolution;
 
-  CameraConfigurationManager(Context context) {
-    this.context = context;
-  }
+	CameraConfigurationManager(Context context) {
+		this.context = context;
+	}
 
-  /**
-   * Reads, one time, values from the camera that are needed by the app.
-   */
-  void initFromCameraParameters(Camera camera) {
-    Camera.Parameters parameters = camera.getParameters();
-    WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-    Display display = manager.getDefaultDisplay();
-    Point theScreenResolution = new Point();
-    display.getSize(theScreenResolution);
-    screenResolution = theScreenResolution;
-    Log.i(TAG, "Screen resolution: " + screenResolution);
-    cameraResolution = CameraConfigurationUtils.findBestPreviewSizeValue(parameters, screenResolution);
-    Log.i(TAG, "Camera resolution: " + cameraResolution);
-  }
+	/**
+	 * Reads, one time, values from the camera that are needed by the app.
+	 * 
+	 * @author Lyon_Yan <br/>
+	 *         <b>time</b>: 2015年10月20日 下午3:46:31
+	 * @param camera
+	 */
+	void initFromCameraParameters(Camera camera) {
+		Camera.Parameters parameters = camera.getParameters();
+		WindowManager manager = (WindowManager) context
+				.getSystemService(Context.WINDOW_SERVICE);
+		Display display = manager.getDefaultDisplay();
+		Point theScreenResolution = new Point(display.getWidth(),
+				display.getHeight());
+		screenResolution = theScreenResolution;
+		Log.i(TAG, "Screen resolution: " + screenResolution);
 
-  void setDesiredCameraParameters(Camera camera, boolean safeMode) {
-    Camera.Parameters parameters = camera.getParameters();
+		/************** 竖屏更改4 ******************/
+		Point screenResolutionForCamera = new Point();
+		screenResolutionForCamera.x = screenResolution.x;
+		screenResolutionForCamera.y = screenResolution.y;
 
-    if (parameters == null) {
-      Log.w(TAG, "Device error: no camera parameters are available. Proceeding without configuration.");
-      return;
-    }
+		// preview size is always something like 480*320, other 320*480
+		if (screenResolution.x < screenResolution.y) {
+			screenResolutionForCamera.x = screenResolution.y;
+			screenResolutionForCamera.y = screenResolution.x;
+		}
 
-    Log.i(TAG, "Initial camera parameters: " + parameters.flatten());
+		cameraResolution = CameraConfigurationUtils.findBestPreviewSizeValue(
+				parameters, screenResolutionForCamera);
+		Log.i(TAG, "Camera resolution: " + cameraResolution);
 
-    if (safeMode) {
-      Log.w(TAG, "In camera config safe mode -- most settings will not be honored");
-    }
+	}
 
-    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+	void setDesiredCameraParameters(Camera camera, boolean safeMode) {
+		Camera.Parameters parameters = camera.getParameters();
 
-    initializeTorch(parameters, prefs, safeMode);
+		if (parameters == null) {
+			Log.w(TAG,
+					"Device error: no camera parameters are available. Proceeding without configuration.");
+			return;
+		}
 
-    CameraConfigurationUtils.setFocus(
-        parameters,
-        prefs.getBoolean(PreferencesActivity.KEY_AUTO_FOCUS, true),
-        prefs.getBoolean(PreferencesActivity.KEY_DISABLE_CONTINUOUS_FOCUS, true),
-        safeMode);
+		Log.i(TAG, "Initial camera parameters: " + parameters.flatten());
 
-    if (!safeMode) {
-      if (prefs.getBoolean(PreferencesActivity.KEY_INVERT_SCAN, false)) {
-        CameraConfigurationUtils.setInvertColor(parameters);
-      }
+		if (safeMode) {
+			Log.w(TAG,
+					"In camera config safe mode -- most settings will not be honored");
+		}
 
-      if (!prefs.getBoolean(PreferencesActivity.KEY_DISABLE_BARCODE_SCENE_MODE, true)) {
-        CameraConfigurationUtils.setBarcodeSceneMode(parameters);
-      }
+		SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(context);
 
-      if (!prefs.getBoolean(PreferencesActivity.KEY_DISABLE_METERING, true)) {
-        CameraConfigurationUtils.setVideoStabilization(parameters);
-        CameraConfigurationUtils.setFocusArea(parameters);
-        CameraConfigurationUtils.setMetering(parameters);
-      }
+		initializeTorch(parameters, prefs, safeMode);
 
-    }
+		CameraConfigurationUtils.setFocus(parameters, prefs.getBoolean(
+				PreferencesActivity.KEY_AUTO_FOCUS, true), prefs.getBoolean(
+				PreferencesActivity.KEY_DISABLE_CONTINUOUS_FOCUS, true),
+				safeMode);
 
-    parameters.setPreviewSize(cameraResolution.x, cameraResolution.y);
+		if (!safeMode) {
+			if (prefs.getBoolean(PreferencesActivity.KEY_INVERT_SCAN, false)) {
+				CameraConfigurationUtils.setInvertColor(parameters);
+			}
 
-    Log.i(TAG, "Final camera parameters: " + parameters.flatten());
+			if (!prefs.getBoolean(
+					PreferencesActivity.KEY_DISABLE_BARCODE_SCENE_MODE, true)) {
+				CameraConfigurationUtils.setBarcodeSceneMode(parameters);
+			}
 
-    camera.setParameters(parameters);
+			if (!prefs.getBoolean(PreferencesActivity.KEY_DISABLE_METERING,
+					true)) {
+				CameraConfigurationUtils.setVideoStabilization(parameters);
+				CameraConfigurationUtils.setFocusArea(parameters);
+				CameraConfigurationUtils.setMetering(parameters);
+			}
 
-    Camera.Parameters afterParameters = camera.getParameters();
-    Camera.Size afterSize = afterParameters.getPreviewSize();
-    if (afterSize!= null && (cameraResolution.x != afterSize.width || cameraResolution.y != afterSize.height)) {
-      Log.w(TAG, "Camera said it supported preview size " + cameraResolution.x + 'x' + cameraResolution.y +
-                 ", but after setting it, preview size is " + afterSize.width + 'x' + afterSize.height);
-      cameraResolution.x = afterSize.width;
-      cameraResolution.y = afterSize.height;
-    }
-  }
+		}
 
-  Point getCameraResolution() {
-    return cameraResolution;
-  }
+		parameters.setPreviewSize(cameraResolution.x, cameraResolution.y);
 
-  Point getScreenResolution() {
-    return screenResolution;
-  }
+		Log.i(TAG, "Final camera parameters: " + parameters.flatten());
 
-  boolean getTorchState(Camera camera) {
-    if (camera != null) {
-      Camera.Parameters parameters = camera.getParameters();
-      if (parameters != null) {
-        String flashMode = parameters.getFlashMode();
-        return flashMode != null &&
-            (Camera.Parameters.FLASH_MODE_ON.equals(flashMode) ||
-             Camera.Parameters.FLASH_MODE_TORCH.equals(flashMode));
-      }
-    }
-    return false;
-  }
+		camera.setParameters(parameters);
 
-  void setTorch(Camera camera, boolean newSetting) {
-    Camera.Parameters parameters = camera.getParameters();
-    doSetTorch(parameters, newSetting, false);
-    camera.setParameters(parameters);
-  }
+		Camera.Parameters afterParameters = camera.getParameters();
+		Camera.Size afterSize = afterParameters.getPreviewSize();
+		if (afterSize != null
+				&& (cameraResolution.x != afterSize.width || cameraResolution.y != afterSize.height)) {
+			Log.w(TAG, "Camera said it supported preview size "
+					+ cameraResolution.x + 'x' + cameraResolution.y
+					+ ", but after setting it, preview size is "
+					+ afterSize.width + 'x' + afterSize.height);
+			cameraResolution.x = afterSize.width;
+			cameraResolution.y = afterSize.height;
+		}
+	}
 
-  private void initializeTorch(Camera.Parameters parameters, SharedPreferences prefs, boolean safeMode) {
-    boolean currentSetting = FrontLightMode.readPref(prefs) == FrontLightMode.ON;
-    doSetTorch(parameters, currentSetting, safeMode);
-  }
+	Point getCameraResolution() {
+		return cameraResolution;
+	}
 
-  private void doSetTorch(Camera.Parameters parameters, boolean newSetting, boolean safeMode) {
-    CameraConfigurationUtils.setTorch(parameters, newSetting);
-    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-    if (!safeMode && !prefs.getBoolean(PreferencesActivity.KEY_DISABLE_EXPOSURE, true)) {
-      CameraConfigurationUtils.setBestExposure(parameters, newSetting);
-    }
-  }
+	Point getScreenResolution() {
+		return screenResolution;
+	}
+
+	boolean getTorchState(Camera camera) {
+		if (camera != null) {
+			Camera.Parameters parameters = camera.getParameters();
+			if (parameters != null) {
+				String flashMode = parameters.getFlashMode();
+				return flashMode != null
+						&& (Camera.Parameters.FLASH_MODE_ON.equals(flashMode) || Camera.Parameters.FLASH_MODE_TORCH
+								.equals(flashMode));
+			}
+		}
+		return false;
+	}
+
+	void setTorch(Camera camera, boolean newSetting) {
+		Camera.Parameters parameters = camera.getParameters();
+		doSetTorch(parameters, newSetting, false);
+		camera.setParameters(parameters);
+	}
+
+	private void initializeTorch(Camera.Parameters parameters,
+			SharedPreferences prefs, boolean safeMode) {
+		boolean currentSetting = FrontLightMode.readPref(prefs) == FrontLightMode.ON;
+		doSetTorch(parameters, currentSetting, safeMode);
+	}
+
+	private void doSetTorch(Camera.Parameters parameters, boolean newSetting,
+			boolean safeMode) {
+		CameraConfigurationUtils.setTorch(parameters, newSetting);
+		SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(context);
+		if (!safeMode
+				&& !prefs.getBoolean(PreferencesActivity.KEY_DISABLE_EXPOSURE,
+						true)) {
+			CameraConfigurationUtils.setBestExposure(parameters, newSetting);
+		}
+	}
 
 }

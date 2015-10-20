@@ -36,6 +36,10 @@ public class CameraUtils {
 			degrees = 270;
 			break;
 		}
+//		/**
+//		 * 调整屏幕
+//		 */
+//		degrees+=90;
 		int result;
 		if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
 			result = (info.orientation + degrees) % 360;
