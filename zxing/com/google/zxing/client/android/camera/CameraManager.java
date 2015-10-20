@@ -45,7 +45,7 @@ public final class CameraManager {
 
 	private static final int MIN_FRAME_WIDTH = 240;
 	private static final int MIN_FRAME_HEIGHT = 240;
-	private static final int MAX_FRAME_WIDTH = 1200; // = 5/8 * 1920
+	private static final int MAX_FRAME_WIDTH = 675;//1200; // = 5/8 * 1920
 	private static final int MAX_FRAME_HEIGHT = 675; // = 5/8 * 1080
 
 	private final Context context;
@@ -73,7 +73,7 @@ public final class CameraManager {
 	}
 
 	/**
-	 * TEMP
+	 * TEMPsetDisplayOrientation
 	 * 
 	 * @author Lyon_Yan <br/>
 	 *         <b>time</b>: 2015年10月20日 下午2:07:31
@@ -279,6 +279,10 @@ public final class CameraManager {
 
 			int leftOffset = (screenResolution.x - width) / 2;
 			int topOffset = (screenResolution.y - height) / 2;
+			/**
+			 * 由於增加了toolbar，多處了狀態欄與toolbar的高度，在此處統一減去
+			 */
+			topOffset=(topOffset>200)?topOffset-100:topOffset;
 			framingRect = new Rect(leftOffset, topOffset, leftOffset + width,
 					topOffset + height);
 			Log.d(TAG, "Calculated framing rect: " + framingRect);

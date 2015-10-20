@@ -182,17 +182,6 @@ public class MainActivity extends AppCompatActivity implements
         characterSet = null;
     }
 
-	private int getCurrentOrientation() {
-		int rotation = getWindowManager().getDefaultDisplay().getRotation();
-		switch (rotation) {
-		case Surface.ROTATION_0:
-		case Surface.ROTATION_90:
-			return ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-		default:
-			return ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
-		}
-	}
-
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		// TODO Auto-generated method stub
