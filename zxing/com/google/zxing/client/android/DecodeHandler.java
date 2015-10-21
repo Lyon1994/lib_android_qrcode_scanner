@@ -19,7 +19,7 @@ package com.google.zxing.client.android;
 import java.io.ByteArrayOutputStream;
 import java.util.Map;
 
-import org.lyon_yan.android.lib_android_qrcode_scanner.MainActivity;
+import org.lyon_yan.android.lib_android_qrcode_scanner.ScannerQRActivity;
 import org.lyon_yan.android.lib_android_qrcode_scanner.R;
 
 import android.graphics.Bitmap;
@@ -41,11 +41,11 @@ final class DecodeHandler extends Handler {
 
 	private static final String TAG = DecodeHandler.class.getSimpleName();
 
-	private final MainActivity activity;
+	private final ScannerQRActivity activity;
 	private final MultiFormatReader multiFormatReader;
 	private boolean running = true;
 
-	DecodeHandler(MainActivity activity, Map<DecodeHintType, Object> hints) {
+	DecodeHandler(ScannerQRActivity activity, Map<DecodeHintType, Object> hints) {
 		multiFormatReader = new MultiFormatReader();
 		multiFormatReader.setHints(hints);
 		this.activity = activity;

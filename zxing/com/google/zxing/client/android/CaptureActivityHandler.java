@@ -19,7 +19,7 @@ package com.google.zxing.client.android;
 import java.util.Collection;
 import java.util.Map;
 
-import org.lyon_yan.android.lib_android_qrcode_scanner.MainActivity;
+import org.lyon_yan.android.lib_android_qrcode_scanner.ScannerQRActivity;
 import org.lyon_yan.android.lib_android_qrcode_scanner.R;
 
 import android.app.Activity;
@@ -52,7 +52,7 @@ public final class CaptureActivityHandler extends Handler {
 	private static final String TAG = CaptureActivityHandler.class
 			.getSimpleName();
 
-	private final MainActivity activity;
+	private final ScannerQRActivity activity;
 	private final DecodeThread decodeThread;
 	private State state;
 	private final CameraManager cameraManager;
@@ -61,7 +61,7 @@ public final class CaptureActivityHandler extends Handler {
 		PREVIEW, SUCCESS, DONE
 	}
 
-	public 	CaptureActivityHandler(MainActivity activity,
+	public 	CaptureActivityHandler(ScannerQRActivity activity,
 			Collection<BarcodeFormat> decodeFormats,
 			Map<DecodeHintType, ?> baseHints, String characterSet,
 			CameraManager cameraManager) {

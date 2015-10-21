@@ -22,7 +22,7 @@ import java.util.EnumSet;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
-import org.lyon_yan.android.lib_android_qrcode_scanner.MainActivity;
+import org.lyon_yan.android.lib_android_qrcode_scanner.ScannerQRActivity;
 
 import android.content.SharedPreferences;
 import android.os.Handler;
@@ -44,12 +44,12 @@ public final class DecodeThread extends Thread {
   public static final String BARCODE_BITMAP = "barcode_bitmap";
   public static final String BARCODE_SCALED_FACTOR = "barcode_scaled_factor";
 
-  private final MainActivity activity;
+  private final ScannerQRActivity activity;
   private final Map<DecodeHintType,Object> hints;
   private Handler handler;
   private final CountDownLatch handlerInitLatch;
 
-  public  DecodeThread(MainActivity activity,
+  public  DecodeThread(ScannerQRActivity activity,
                Collection<BarcodeFormat> decodeFormats,
                Map<DecodeHintType,?> baseHints,
                String characterSet,

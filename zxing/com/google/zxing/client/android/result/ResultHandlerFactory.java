@@ -16,7 +16,7 @@
 
 package com.google.zxing.client.android.result;
 
-import org.lyon_yan.android.lib_android_qrcode_scanner.MainActivity;
+import org.lyon_yan.android.lib_android_qrcode_scanner.ScannerQRActivity;
 
 import com.google.zxing.Result;
 import com.google.zxing.client.result.ParsedResult;
@@ -31,7 +31,7 @@ public final class ResultHandlerFactory {
   private ResultHandlerFactory() {
   }
 
-  public static ResultHandler makeResultHandler(MainActivity activity, Result rawResult) {
+  public static ResultHandler makeResultHandler(ScannerQRActivity activity, Result rawResult) {
     ParsedResult result = parseResult(rawResult);
     switch (result.getType()) {
       case ADDRESSBOOK:

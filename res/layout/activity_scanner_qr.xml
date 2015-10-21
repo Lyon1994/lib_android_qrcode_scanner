@@ -14,7 +14,9 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:title="扫描二维码" >
+            app:title="扫描二维码" 
+            app:popupTheme="@style/AppTheme"
+            app:theme="@style/AppTheme_Dark">
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 

@@ -23,18 +23,19 @@
         <item name="android:layout_height">wrap_content</item>
     </style>
     <!-- Application theme. -->
-    <style name="AppTheme" parent="AppBaseTheme">
-        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
-        <!--
-        <item name="colorPrimary">@color/material_deep_teal_500</item>
-        <item name="colorPrimaryDark">@color/material_deep_teal_200</item>
-        <item name="colorAccent">@color/abc_primary_text_material_light</item>
-        <item name="colorControlNormal">@color/red900</item>
-        <item name="colorControlHighlight">@color/blue100</item>
-        <item name="colorButtonNormal">@color/amber100</item>
-        <item name="colorSwitchThumbNormal">@color/cyan100</item>
-        <item name="controlBackground">@color/orange100</item>
-        -->
+      <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/amber900</item>
+        <item name="colorPrimaryDark">@color/amber900</item>
+        <item name="colorAccent">@color/amber700</item>
+        <item name="colorControlNormal">@android:color/white</item>
+        <item name="android:windowBackground">@color/window_background</item>
+    </style>
+
+    <style name="AppTheme_Dark" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">@color/amber700</item>
+        <item name="colorPrimaryDark">#512DA8</item>
+        <item name="colorAccent">@color/amber700</item>
+        <item name="android:windowBackground">@color/window_background</item>
     </style>
 
 </resources>

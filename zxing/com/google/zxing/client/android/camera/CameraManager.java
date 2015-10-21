@@ -19,6 +19,8 @@ package com.google.zxing.client.android.camera;
 import java.io.IOException;
 import java.lang.reflect.Method;
 
+import org.lyon_yan.app.android.utils.Device;
+
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Point;
@@ -45,7 +47,7 @@ public final class CameraManager {
 
 	private static final int MIN_FRAME_WIDTH = 240;
 	private static final int MIN_FRAME_HEIGHT = 240;
-	private static final int MAX_FRAME_WIDTH = 675;//1200; // = 5/8 * 1920
+	private static final int MAX_FRAME_WIDTH = 1200; // = 5/8 * 1920
 	private static final int MAX_FRAME_HEIGHT = 675; // = 5/8 * 1080
 
 	private final Context context;
@@ -127,18 +129,48 @@ public final class CameraManager {
 		/**
 		 * android 相机旋转90度的处理方法
 		 */
-		if (Integer.parseInt(Build.VERSION.SDK) >= 8)
-			setDisplayOrientation(camera, 90);
-		else {
+		if (Device.isPad(context)) {
 			if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
 				parameters.set("orientation", "portrait");
 				parameters.set("rotation", 90);
+				theCamera.setDisplayOrientation(90);
+				
 			}
 			if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
 				parameters.set("orientation", "landscape");
+				parameters.set("rotation", 0);
+				theCamera.setDisplayOrientation(0);
+			}else if(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_SQUARE){
+				Log.d("lyon1", "***************************1");
+			}else if(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_UNDEFINED){
+				Log.d("lyon1", "***************************2");
+			}
+		}else{
+			if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+				parameters.set("orientation", "portrait");
 				parameters.set("rotation", 90);
+				theCamera.setDisplayOrientation(90);
+			}
+			if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+				parameters.set("orientation", "landscape");
+				parameters.set("rotation", 0);
+				theCamera.setDisplayOrientation(0);
 			}
 		}
+//		if (Device.isPad(context)) {
+//			if (Integer.parseInt(Build.VERSION.SDK) < 8)
+//				setDisplayOrientation(camera, 90);
+//			else {
+//				if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+//					parameters.set("orientation", "portrait");
+//					parameters.set("rotation", 90);
+//				}
+//				if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+//					parameters.set("orientation", "landscape");
+//					parameters.set("rotation", 90);
+//				}
+//			}
+//		}
 
 		String parametersFlattened = parameters == null ? null : parameters
 				.flatten(); // Save these, temporarily
@@ -282,7 +314,7 @@ public final class CameraManager {
 			/**
 			 * 由於增加了toolbar，多處了狀態欄與toolbar的高度，在此處統一減去
 			 */
-			topOffset=(topOffset>200)?topOffset-100:topOffset;
+			topOffset = (topOffset > 200) ? topOffset - 100 : topOffset;
 			framingRect = new Rect(leftOffset, topOffset, leftOffset + width,
 					topOffset + height);
 			Log.d(TAG, "Calculated framing rect: " + framingRect);

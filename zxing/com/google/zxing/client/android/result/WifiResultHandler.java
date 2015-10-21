@@ -16,7 +16,7 @@
 
 package com.google.zxing.client.android.result;
 
-import org.lyon_yan.android.lib_android_qrcode_scanner.MainActivity;
+import org.lyon_yan.android.lib_android_qrcode_scanner.ScannerQRActivity;
 import org.lyon_yan.android.lib_android_qrcode_scanner.R;
 
 import android.app.Activity;
@@ -40,9 +40,9 @@ public final class WifiResultHandler extends ResultHandler {
 
   private static final String TAG = WifiResultHandler.class.getSimpleName();
 
-  private final MainActivity parent;
+  private final ScannerQRActivity parent;
 
-  public WifiResultHandler(MainActivity activity, ParsedResult result) {
+  public WifiResultHandler(ScannerQRActivity activity, ParsedResult result) {
     super(activity, result);
     parent = activity;
   }
