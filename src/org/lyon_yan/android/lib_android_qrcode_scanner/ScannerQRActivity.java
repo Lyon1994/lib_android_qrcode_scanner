@@ -240,6 +240,7 @@ public class ScannerQRActivity extends AppCompatActivity implements
 	private void initView() {
 		// TODO Auto-generated method stub
 		toolbar = (Toolbar) findViewById(R.id.toolbar);
+		setSupportActionBar(toolbar);
 		toolbar.setNavigationOnClickListener(new OnClickListener() {
 
 			@Override
@@ -248,7 +249,6 @@ public class ScannerQRActivity extends AppCompatActivity implements
 				finish();
 			}
 		});
-		setSupportActionBar(toolbar);
 		getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
 		getSupportActionBar().setDisplayShowHomeEnabled(true);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
