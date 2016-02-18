@@ -1,10 +1,11 @@
 package org.lyon_yan.app.android.lib_android_qrcode_scanner.utils;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Point;
 import android.hardware.Camera;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.Surface;
@@ -28,10 +29,29 @@ public class CameraUtils {
     }
 
     public synchronized static Camera.Parameters initParametersV1(Camera.Parameters parameters, Camera camera, Context context) {
-        Point cameraResolution=findBestPreviewSizeValue(parameters,context);
-        parameters.setPictureSize(cameraResolution.x,cameraResolution.y);
-        parameters.setPreviewSize(cameraResolution.x,cameraResolution.y);
-        Log.v("-----cameraResolution--","cameraResolution:{"+cameraResolution.x+","+cameraResolution.y+"}");
+        Point cameraResolution = findBestPreviewSizeValue(parameters, context);
+        Configuration mConfiguration = activity.getResources().getConfiguration(); //获取设置的配置信息
+        if (mConfiguration.orientation == mConfiguration.ORIENTATION_LANDSCAPE){
+//            parameters.setPictureSize(cameraResolution.y, cameraResolution.x);
+//            parameters.setPreviewSize(cameraResolution.y, cameraResolution.x);
+        } else{
+            parameters.setPictureSize(cameraResolution.x, cameraResolution.y);
+            parameters.setPreviewSize(cameraResolution.x, cameraResolution.y);
+            Log.v("-----cameraResolution--", "cameraResolution:{" + cameraResolution.x + "," + cameraResolution.y + "}");
+        }
+
+//        try {
+//            parameters.setPictureSize(cameraResolution.x, cameraResolution.y);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        try {
+//            parameters.setPreviewSize(cameraResolution.x, cameraResolution.y);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        Log.v("-----cameraResolution--", "cameraResolution:{" + cameraResolution.x + "," + cameraResolution.y + "}");
+
 
         if (activity != null) {
             int degrees = 90;
@@ -57,6 +77,25 @@ public class CameraUtils {
                     Log.v("....................", "ROTATION_NULL");
                     break;
             }
+            /**
+             * 兼容平板模式
+             */
+            if (isTablet(activity)) {
+                switch (degrees){
+                    case 0:
+                        degrees=270;
+                        break;
+                    case 90:
+                        degrees=0;
+                        break;
+                    case 180:
+                        degrees=90;
+                        break;
+                    case 270:
+                        degrees=180;
+                        break;
+                }
+            }
             parameters.set("orientation", "portrait");
             parameters.set("rotation", degrees);
             camera.setDisplayOrientation(degrees);
@@ -67,7 +106,7 @@ public class CameraUtils {
 
     private static Point findBestPreviewSizeValue(Camera.Parameters paramParameters, Context context) {
         //noinspection ResourceType
-        Display localDisplay = ((WindowManager)context.getSystemService("window")).getDefaultDisplay();
+        Display localDisplay = ((WindowManager) context.getSystemService("window")).getDefaultDisplay();
         Point paramPoint = new Point();
         localDisplay.getSize(paramPoint);
         List localList = paramParameters.getSupportedPreviewSizes();
@@ -175,5 +214,39 @@ public class CameraUtils {
             }
             return k;
         }
+    }
+    /**
+     * 判断是否为平板
+     * @param context
+     * @return
+     */
+    private static boolean isTablet(Context context) {
+        return (context.getResources().getConfiguration().screenLayout
+                & Configuration.SCREENLAYOUT_SIZE_MASK)
+                >= Configuration.SCREENLAYOUT_SIZE_LARGE;
+    }
+    /**
+     * 判断是否为平板
+     *
+     * @return
+     */
+    private static boolean isPad(Context context) {
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        // 屏幕宽度
+        float screenWidth = display.getWidth();
+        // 屏幕高度
+        float screenHeight = display.getHeight();
+        DisplayMetrics dm = new DisplayMetrics();
+        display.getMetrics(dm);
+        double x = Math.pow(dm.widthPixels / dm.xdpi, 2);
+        double y = Math.pow(dm.heightPixels / dm.ydpi, 2);
+        // 屏幕尺寸
+        double screenInches = Math.sqrt(x + y);
+        // 大于6尺寸则为Pad
+        if (screenInches >= 6.0) {
+            return true;
+        }
+        return false;
     }
 }
